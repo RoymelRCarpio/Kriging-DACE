@@ -1,2 +1,3 @@
 # Kriging-DACE
-Kriging surrogate model 
+Kriging surrogate model. 
+Based on DACE Matlab toolbox.
