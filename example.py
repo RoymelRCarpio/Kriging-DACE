@@ -69,8 +69,8 @@ dmodel, perf = dacefit(X_train, y_train, t0, regpoly2, gauss, lob, upb)
 y_pred_multi, dy_multi, mse_multi, dmse_multi = predictor(X_test, dmodel)
 
 'Fazendo o gráfico para avaliar a qualidade da predição'
-xy_min = float(min(min(y_test), min(y_pred_multi)))
-xy_max = float(max(max(y_test), max(y_pred_multi)))
+xy_min = min(min(y_test[:,0]), min(y_pred_multi[:,0]))
+xy_max = max(max(y_test[:,0]), max(y_pred_multi[:,0]))
 p1 = np.array([xy_min, xy_max])
 p2 = np.array([xy_min, xy_max])
 plt.figure()
@@ -84,7 +84,7 @@ plt.ylabel('Valores de Y estimados pelo Kriging')
 ponto = np.array([[0, 0]])
 y_pred_single, dy_single, mse_single, dmse_single = predictor(ponto, dmodel)
 y_real_sinlge = process(ponto)
-print(f'Em {ponto} predição = {float(y_pred_single)} e real = {float(y_real_sinlge)}')
+print(f'Em {ponto} predição = {y_pred_single[0,0]} e real = {y_real_sinlge[0,0]}')
 print(f'Em {ponto} dY/dX1 = ', dy_single[0,0])
 print(f'Em {ponto} dY/dX2 = ', dy_single[1,0])
 
@@ -93,7 +93,7 @@ print(f'Em {ponto} dY/dX2 = ', dy_single[1,0])
 def FO(x):
     ponto = np.array([x])
     y, dy, mse, dmse = predictor(ponto, dmodel)
-    return float(y)
+    return y[0,0]
 
 'Derivada da função objetivo'
 def der_FO(x):
@@ -113,6 +113,8 @@ bounds = Bounds(lb=LB, ub=UB)
 method = 'SLSQP'
 opt_sol = minimize(FO, x0, method=method, bounds=bounds, jac=der_FO, tol=1e-10, 
                            options={'disp': True, 'maxiter': 100, 'eps':1e-6})
+
+print(f'Solução ótima em {opt_sol.x} com valor de FO igual a {opt_sol.fun}' )
 
 'Colocando o ótimo achado no gráfico de curvas de nivel'
 x1 = np.arange(-2, 2, 0.1)
