@@ -24,9 +24,9 @@ def predictor(
     assert isinstance(x, np.ndarray)
     assert isinstance(dmodel, Dmodel)
 
-    or1 = np.NaN
-    or2 = np.NaN
-    dmse = np.NaN
+    or1 = np.nan
+    or2 = np.nan
+    dmse = np.nan
 
     if np.any(np.isnan(dmodel.beta)):
         raise Exception('DMODEL has not been found')
